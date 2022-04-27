@@ -149,8 +149,11 @@ public class MainActivity extends AppCompatActivity {
         Random randomS = new Random();
         Random randomV = new Random();
         hsv[0] = randomH.nextInt(3601) / 10f;
-        hsv[1] = randomS.nextInt(101) / 100f;
-        hsv[2] = randomV.nextInt(101) / 100f;
+        //hsv[1] = randomS.nextInt(101) / 100f;
+        //hsv[2] = randomV.nextInt(101) / 100f;
+        //hsv[1] = 0.5f + (randomS.nextInt(51) / 100f);
+        hsv[1] = (randomS.nextInt(51) / 100f);
+        hsv[2] = 0.8f + (randomV.nextInt(21) / 100f);
 
         Log.i("createRandomHSV", "色相=" + hsv[0] + " 彩度=" + hsv[1] + " 明度=" + hsv[2]);
 
@@ -197,11 +200,13 @@ public class MainActivity extends AppCompatActivity {
         //彩度／明度はランダム
         Random randomS = new Random();
         Random randomV = new Random();
-        pairHsv[1] = randomS.nextInt(101) / 100f;
-        pairHsv[2] = randomV.nextInt(101) / 100f;
+        //pairHsv[1] = randomS.nextInt(101) / 100f;
+        //pairHsv[2] = randomV.nextInt(101) / 100f;
+        pairHsv[1] = (randomS.nextInt(51) / 100f);
+        pairHsv[2] = 0.8f + (randomV.nextInt(21) / 100f);
 
         //ベースの色の明度が1.0未満で、ペアの明度も1.5未満なら
-        if( (hsv[2] < 0.1) && (pairHsv[2] < 0.15) ){
+/*        if( (hsv[2] < 0.1) && (pairHsv[2] < 0.15) ){
 
             float tmp = pairHsv[2];
 
@@ -210,7 +215,7 @@ public class MainActivity extends AppCompatActivity {
             pairHsv[2] += (randomAdd.nextInt(86) / 100f) + 0.15f;
 
             Log.i("補色", "明度調整=" + tmp + " → " + pairHsv[2]);
-        }
+        }*/
 
         Log.i("補色", "色相=" + pairHsv[0] + " 彩度=" + pairHsv[1] + " 明度=" + pairHsv[2]);
 
@@ -238,11 +243,13 @@ public class MainActivity extends AppCompatActivity {
         //彩度／明度はランダム
         Random randomS = new Random();
         Random randomV = new Random();
-        pairHsv[1] = randomS.nextInt(101) / 100f;
-        pairHsv[2] = randomV.nextInt(101) / 100f;
+        //pairHsv[1] = randomS.nextInt(101) / 100f;
+        //pairHsv[2] = randomV.nextInt(101) / 100f;
+        pairHsv[1] = (randomS.nextInt(51) / 100f);
+        pairHsv[2] = 0.8f + (randomV.nextInt(21) / 100f);
 
         //ベースの色の明度が1.0未満で、ペアの明度も1.5未満なら
-        if( (hsv[2] < 0.1) && (pairHsv[2] < 0.15) ){
+/*        if( (hsv[2] < 0.1) && (pairHsv[2] < 0.15) ){
 
             float tmp = pairHsv[2];
 
@@ -251,7 +258,7 @@ public class MainActivity extends AppCompatActivity {
             pairHsv[2] += (randomAdd.nextInt(86) / 100f) + 0.15f;
 
             Log.i("15度の隣", "明度調整=" + tmp + " → " + pairHsv[2]);
-        }
+        }*/
 
         Log.i("15度の隣", "色相=" + pairHsv[0] + " 彩度=" + pairHsv[1] + " 明度=" + pairHsv[2]);
 
@@ -279,11 +286,13 @@ public class MainActivity extends AppCompatActivity {
         //彩度／明度はランダム
         Random randomS = new Random();
         Random randomV = new Random();
-        pairHsv[1] = randomS.nextInt(101) / 100f;
-        pairHsv[2] = randomV.nextInt(101) / 100f;
+        //pairHsv[1] = randomS.nextInt(101) / 100f;
+        //pairHsv[2] = randomV.nextInt(101) / 100f;
+        pairHsv[1] = (randomS.nextInt(51) / 100f);
+        pairHsv[2] = 0.8f + (randomV.nextInt(21) / 100f);
 
         //ベースの色の明度が1.0未満で、ペアの明度も1.5未満なら
-        if( (hsv[2] < 0.1) && (pairHsv[2] < 0.15) ){
+/*        if( (hsv[2] < 0.1) && (pairHsv[2] < 0.15) ){
 
             float tmp = pairHsv[2];
 
@@ -292,7 +301,7 @@ public class MainActivity extends AppCompatActivity {
             pairHsv[2] += (randomAdd.nextInt(86) / 100f) + 0.15f;
 
             Log.i("4分割の隣", "明度調整=" + tmp + " → " + pairHsv[2]);
-        }
+        }*/
 
         Log.i("4分割の隣", "色相=" + pairHsv[0] + " 彩度=" + pairHsv[1] + " 明度=" + pairHsv[2]);
 
@@ -320,11 +329,13 @@ public class MainActivity extends AppCompatActivity {
         //彩度／明度はランダム
         Random randomS = new Random();
         Random randomV = new Random();
-        pairHsv[1] = randomS.nextInt(101) / 100f;
-        pairHsv[2] = randomV.nextInt(101) / 100f;
+        //pairHsv[1] = randomS.nextInt(101) / 100f;
+        //pairHsv[2] = randomV.nextInt(101) / 100f;
+        pairHsv[1] = (randomS.nextInt(51) / 100f);
+        pairHsv[2] = 0.8f + (randomV.nextInt(21) / 100f);
 
         //ベースの色の明度が1.0未満で、ペアの明度も1.5未満なら
-        if( (hsv[2] < 0.1) && (pairHsv[2] < 0.15) ){
+/*        if( (hsv[2] < 0.1) && (pairHsv[2] < 0.15) ){
 
             float tmp = pairHsv[2];
 
@@ -333,7 +344,7 @@ public class MainActivity extends AppCompatActivity {
             pairHsv[2] += (randomAdd.nextInt(86) / 100f) + 0.15f;
 
             Log.i("3分割の隣", "明度調整=" + tmp + " → " + pairHsv[2]);
-        }
+        }*/
 
         Log.i("3分割の隣", "色相=" + pairHsv[0] + " 彩度=" + pairHsv[1] + " 明度=" + pairHsv[2]);
 
