@@ -3,6 +3,10 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/takahashi_yhi/AndroidStudioProjects/ColocPatternSample/app/src/main/res/layout/activity_anim_sample.xml" value="0.21510416666666668" />
+        <entry key="..\:/Users/takahashi_yhi/AndroidStudioProjects/ColocPatternSample/app/src/main/res/layout/activity_effect.xml" value="0.22291666666666668" />
+        <entry key="..\:/Users/takahashi_yhi/AndroidStudioProjects/ColocPatternSample/app/src/main/res/layout/activity_effect_heart.xml" value="0.152" />
+        <entry key="..\:/Users/takahashi_yhi/AndroidStudioProjects/ColocPatternSample/app/src/main/res/layout/activity_home_effect.xml" value="0.27807971014492755" />
         <entry key="..\:/Users/takahashi_yhi/AndroidStudioProjects/ColocPatternSample/app/src/main/res/layout/activity_main.xml" value="0.22327898550724637" />
         <entry key="..\:/Users/takahashi_yhi/AndroidStudioProjects/ColocPatternSample/app/src/main/res/layout/activity_main_old.xml" value="0.17760416666666667" />
       </map>

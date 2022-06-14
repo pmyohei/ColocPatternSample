@@ -2,11 +2,12 @@ package com.mark.colocpatternsample;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 
 import java.util.Random;
 
@@ -18,6 +19,57 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        View gradation1 = findViewById(R.id.gradation1);
+        GradientDrawable bgDraw
+                = new GradientDrawable(GradientDrawable.Orientation.BOTTOM_TOP,
+                    new int[]{0xFFa18cd1,
+                              0xFFfbc2eb});
+        gradation1.setBackground(bgDraw);
+        gradation1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //エフェクトハート画面へ
+                Intent intent = new Intent(MainActivity.this, EffectActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        View gradation2 = findViewById(R.id.gradation2);
+        bgDraw = new GradientDrawable(GradientDrawable.Orientation.BOTTOM_TOP,
+                new int[]{0xFFa8edea,
+                          0xFFfed6e3});
+        gradation2.setBackground(bgDraw);
+        gradation2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //エフェクトドット画面へ
+                Intent intent = new Intent(MainActivity.this, EffectDotActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        View toEffect = findViewById(R.id.toEffect);
+        toEffect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //エフェクト画面へ
+                Intent intent = new Intent(MainActivity.this, HomeEffectActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        View anim = findViewById(R.id.toAnim);
+        anim.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //サンプルアニメーション画面へ
+                Intent intent = new Intent(MainActivity.this, AnimSampleActivity.class);
+                startActivity(intent);
+            }
+        });
+
+
 
         View basic = findViewById(R.id.basic);
         basic.setOnClickListener(new View.OnClickListener() {

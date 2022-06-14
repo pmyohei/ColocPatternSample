@@ -9,7 +9,7 @@
     <View
         android:id="@+id/random"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="60dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -27,7 +27,7 @@
     <View
         android:id="@+id/complementary"
         android:layout_width="0dp"
-        android:layout_height="150dp"
+        android:layout_height="120dp"
         app:layout_constraintTop_toBottomOf="@+id/random"
         app:layout_constraintEnd_toStartOf="@+id/basic"
         app:layout_constraintHorizontal_bias="0.5"
@@ -36,7 +36,7 @@
     <View
         android:id="@+id/opornent"
         android:layout_width="0dp"
-        android:layout_height="150dp"
+        android:layout_height="80dp"
         app:layout_constraintTop_toBottomOf="@+id/random"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -45,17 +45,60 @@
     <View
         android:id="@+id/intermediate"
         android:layout_width="0dp"
-        android:layout_height="150dp"
+        android:layout_height="80dp"
         app:layout_constraintTop_toBottomOf="@+id/complementary"
         app:layout_constraintEnd_toStartOf="@+id/basic"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent" />
 
+
+    <View
+        android:id="@+id/gradation1"
+        android:layout_width="0dp"
+        android:layout_height="80dp"
+        app:layout_constraintTop_toBottomOf="@+id/intermediate"
+        app:layout_constraintEnd_toStartOf="@+id/basic"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/toEffect"
+        android:text="エフェクト画面へ"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:gravity="center"
+        android:background="@android:color/darker_gray"
+        app:layout_constraintTop_toBottomOf="@+id/gradation1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintEnd_toStartOf="@+id/basic" />
+
     <View
         android:id="@+id/analogy"
         android:layout_width="0dp"
-        android:layout_height="150dp"
+        android:layout_height="80dp"
         app:layout_constraintTop_toBottomOf="@+id/opornent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/basic" />
+
+    <View
+        android:id="@+id/gradation2"
+        android:layout_width="0dp"
+        android:layout_height="80dp"
+        app:layout_constraintTop_toBottomOf="@+id/analogy"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/basic" />
+
+    <TextView
+        android:id="@+id/toAnim"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:text="アニメーション画面へ"
+        android:gravity="center"
+        android:background="@android:color/darker_gray"
+        app:layout_constraintTop_toBottomOf="@+id/gradation2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/basic" />
