@@ -62,7 +62,7 @@ public class DotView extends View {
     public void setRandomSize(){
         Random random = new Random();
         int offset = random.nextInt(21);
-        mSize = 4 + offset;
+        mSize = 40 + offset;
         //mSize = 10;
     }
 
@@ -95,17 +95,35 @@ public class DotView extends View {
         mPaint.setShadowLayer( mSize, 0, 0, shadowColor );
 
         //paint.setColor(getResources().getColor(R.color.mark_5));
-        canvas.drawCircle(width / 2f, getHeight() / 2f, mSize, mPaint);
+        //canvas.drawCircle(width / 2f, getHeight() / 2f, mSize, mPaint);
+        canvas.drawCircle(width / 2f, getHeight() / 2f, mSize/2, mPaint);
     }
 
     public void setShadow(){
-
         shadowColor = Color.BLUE;
         invalidate();
     }
 
-
     public void setMovex( float value ){
         setTranslationX( value );
     }
+
+    /*
+     * onMeasure
+     *   本ビューへのサイズ反映を目的にオーバーライド
+     */
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+
+        //設定サイズを保持していれば、反映する
+        if (mSize > 0) {
+            setMeasuredDimension(mSize*10, mSize*10);
+        }
+    }
+
+
+
+
+
 }

@@ -12,8 +12,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.DecelerateInterpolator;
+import android.view.animation.LinearInterpolator;
 import android.view.animation.PathInterpolator;
 import android.widget.FrameLayout;
 
@@ -54,9 +56,11 @@ public class EffectActivity extends AppCompatActivity {
 
             int centerX = fl.getWidth() / 2;
             int centerY = fl.getHeight() / 2;
+            int bottom = fl.getHeight();
+            bottom -= 100;
 
             //-- ランダムにいくつも生成 --//
-            for( int i = 0; i < 32; i++ ){
+            for( int i = 0; i < 16; i++ ){
                 EffectView effectView = new EffectView(this, kind);
                 fl.addView(effectView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT );
 
@@ -81,12 +85,13 @@ public class EffectActivity extends AppCompatActivity {
                 }
 
                 //位置設定
+                int viewX = centerX + offsetX;
+                int viewY = centerY + offsetY;
                 ViewGroup.MarginLayoutParams mlp = (ViewGroup.MarginLayoutParams) effectView.getLayoutParams();
-                mlp.setMargins(centerX + offsetX, centerY + offsetY, mlp.rightMargin, mlp.bottomMargin);
+                mlp.setMargins(viewX, viewY, mlp.rightMargin, mlp.bottomMargin);
+                //mlp.setMargins(centerX, bottom, mlp.rightMargin, mlp.bottomMargin);
                 //mlp.setMargins(100 + 300, 200 + 300, mlp.rightMargin, mlp.bottomMargin);
-
-                Log.i("サイズ問題", "ｘ=" + (centerX + offsetX));
-
+                //Log.i("サイズ問題", "ｘ=" + (centerX + offsetX));
 
                 //アニメーション（xmlを利用）
                 if( i < 0 ){
@@ -117,31 +122,73 @@ public class EffectActivity extends AppCompatActivity {
 
                 //アニメーション（ビュー内クラスを利用、曲線モーションの動作確認
                 if( i < 0 ) {
-
                     random = new Random();
-                    int duration = random.nextInt( 2001 ) + 2000;
-                    int delay    = random.nextInt( 601 );
+                    //int duration  = random.nextInt( 2001 ) + 1000;
+                    int duration = 3000;
+                    int delay     = random.nextInt( 601 );
+                    int endHeight = random.nextInt( 401 ) + 300;
+                    int endCtrl = (int)(endHeight * 0.75f);
+                    int halfHeight = (int)(endHeight * 0.5f);
+                    int halfCtrl = (int)(halfHeight * 0.5f);
+
+                    int xRange = random.nextInt( 81 ) + 10;
 
                     Path path = new Path();
                     //円弧を描くような動き
-                    //path.arcTo(centerX + offsetX, centerY + offsetY, centerX + offsetX + 40f, centerY + offsetY + 800f, 90f, 180f, true);
+                    //path.arcTo(viewX, viewY, viewX + 40f, viewY + 800f, 90f, 180f, true);
 
                     //カーブ
-                    //path.moveTo ( centerX + offsetX, centerY + offsetY);
-                    //path.rQuadTo ( (centerX + offsetX) + 100, (centerY + offsetY) + 200, (centerX + offsetX) + 0 , (centerY + offsetY) + 400);
-                    path.quadTo ( (centerX + offsetX) + 100, (centerY + offsetY) + 200, (centerX + offsetX) + 0 , (centerY + offsetY) + 400);
+                    path.moveTo ( centerX, bottom);
+                    //path.rQuadTo ( (viewX) + 100, (viewY) + 200, (viewX) + 0 , (viewY) + 400);
+                    path.quadTo ( centerX + xRange, bottom - halfCtrl, centerX, bottom - halfHeight);
+                    path.quadTo ( centerX - xRange, bottom - endCtrl, centerX, bottom - endHeight);
 
-                    ObjectAnimator animator = ObjectAnimator.ofFloat(effectView, View.X, View.Y, path);
-                    animator.setDuration(duration);
-                    //animator.setStartDelay(delay);
-                    animator.setInterpolator( new DecelerateInterpolator());
-                    animator.start();
+                    //上昇
+                    ObjectAnimator floatAnimator = ObjectAnimator.ofFloat(effectView, View.X, View.Y, path);
+                    floatAnimator.setDuration(duration);
+                    floatAnimator.setStartDelay(delay);
+                    floatAnimator.setInterpolator( new AccelerateDecelerateInterpolator());
+                    //floatAnimator.setInterpolator( new DecelerateInterpolator());
+                    //floatAnimator.setInterpolator( new LinearInterpolator());
+                    floatAnimator.start();
 
+                    //徐々に透明化
+                    ObjectAnimator alphaAnimator = ObjectAnimator.ofFloat(effectView, "alpha", 1f, 0f);
+                    alphaAnimator.setDuration(duration);
+                    alphaAnimator.setStartDelay(delay);
+                    alphaAnimator.setInterpolator( new LinearInterpolator());
+                    alphaAnimator.start();
+
+                    //アニメータをセットして開始
+                    AnimatorSet animatorSet = new AnimatorSet();
+                    animatorSet.play(floatAnimator).with(alphaAnimator);
+                    animatorSet.start();
                 }
+
+                //アニメーション（ビュー内クラスを利用、曲線モーションの動作確認
+                if( i < 0 ) {
+                    random = new Random();
+                    int duration  = random.nextInt( 2001 ) + 1000;
+                    //int duration = 3000;
+                    int delay     = random.nextInt( 601 );
+
+                    //拡大縮小の繰り返し
+                    ObjectAnimator scaleAnimator = ObjectAnimator.ofFloat(effectView, "scale", 1.0f,  0.4f);
+                    scaleAnimator.setDuration(duration);
+                    scaleAnimator.setStartDelay(delay);
+                    scaleAnimator.setInterpolator( new LinearInterpolator());
+                    scaleAnimator.setRepeatCount( -1 );
+                    scaleAnimator.setRepeatMode( ValueAnimator.REVERSE );
+                    scaleAnimator.start();
+
+                    //アニメータをセットして開始
+                    AnimatorSet animatorSet = new AnimatorSet();
+                    animatorSet.play(scaleAnimator);
+                    animatorSet.start();
+                }
+
             }
         });
-
-
 
     }
 }

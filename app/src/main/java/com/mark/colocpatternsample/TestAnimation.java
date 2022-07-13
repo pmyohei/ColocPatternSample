@@ -18,7 +18,7 @@ public class TestAnimation extends Animation {
 
     @Override
     protected void applyTransformation(float interpolatedTime, Transformation transformation) {
-        // interpolatedTime: 0.0f -> 1.0f
+        //interpolatedTime: 0.0f -> 1.0f
         //int pp = (int)((endPosition-currentPosition)*interpolatedTime);
 
         //グラデーションを設定

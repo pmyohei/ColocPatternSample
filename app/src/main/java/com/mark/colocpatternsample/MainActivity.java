@@ -183,10 +183,6 @@ public class MainActivity extends AppCompatActivity {
                 view.setBackgroundColor(pairColor);
             }
         });
-
-
-
-
     }
 
 

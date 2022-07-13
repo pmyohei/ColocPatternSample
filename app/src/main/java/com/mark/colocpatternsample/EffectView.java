@@ -51,7 +51,7 @@ public class EffectView extends View {
         setRandomColor();
         setRandomSize();
         setRandomAlpha();
-        setRandomRotate();
+        //setRandomRotate();
 
         setLayerType(View.LAYER_TYPE_SOFTWARE, null);
 
@@ -189,7 +189,7 @@ public class EffectView extends View {
         Random random = new Random();
         int rotate = random.nextInt(361);
 
-        setRotate( rotate );
+        setRotate(rotate);
 
     }
 
@@ -198,6 +198,14 @@ public class EffectView extends View {
      */
     public void setSize(int size) {
         mSize = size;
+    }
+
+    /*
+     * スケール設定
+     */
+    public void setScale(float value) {
+        setScaleX( value );
+        setScaleY( value );
     }
 
     public void setColorID(int colorID) {
@@ -288,11 +296,18 @@ public class EffectView extends View {
 
         Path path = new Path();
 
+/*
         path.moveTo(mHalfSize, mSize);
         path.lineTo(0, mHalfSize);
         path.cubicTo(0, 0, mHalfSize, 0, mHalfSize, mHalfSize);
         path.cubicTo(mHalfSize, 0, mSize, 0, mSize, mHalfSize);
         path.lineTo(mHalfSize, mSize);
+        path.close();
+*/
+
+        path.moveTo(mHalfSize, mSize);
+        path.cubicTo(-mHalfSize, mHalfSize, mHalfSize / 2, 0, mHalfSize, mHalfSize / 1.5f);
+        path.cubicTo(mHalfSize + (mHalfSize / 2), 0, mSize + mHalfSize, mHalfSize, mHalfSize, mSize);
         path.close();
 
         return path;
@@ -450,28 +465,15 @@ public class EffectView extends View {
 
     /*
      * スパークル：中央に円あり
+     * 　　複数Pathを生成して、最後に合わせるやり方
      */
-    private Path create2Sparcle( Canvas canvas ) {
-
-/*
-        int startAngle = -90;                               //90度の位置から頂点を描画
-        float viewRadius = mHalfSize / 4f;                  //基本半径
-        //float outerRadius = mHalfSize - (mHalfSize / 2f);   //基本半径に加算
-        float outerRadius = mHalfSize;   //基本半径に加算
-        float innerRadius = 0;                              //基本半径から減算
-        int points = 8;                                     //外側の頂点数（普通の星の場合は5つ）
-*/
-
-
+    private Path createCenterCircleSparcle(Canvas canvas) {
 
         /*
-          中心円の生成
+          グラデーション
          */
-        Path circlePath = new Path();
-        circlePath.addCircle(mHalfSize, mHalfSize, mHalfSize / 3, Path.Direction.CW);
-
-        //放射状グラデーション
-        Shader gradient = new RadialGradient(
+        //中心円のグラデーション
+        Shader circleGradient = new RadialGradient(
                 //中心座標
                 mHalfSize, mHalfSize,
                 //半径
@@ -479,100 +481,50 @@ public class EffectView extends View {
                 getResources().getColor(R.color.white88), getResources().getColor(R.color.white00),
                 Shader.TileMode.CLAMP);
 
-        //ペイントにグラデーションを設定
+        //十字のグラデーション
+        Shader spacleGradient = new RadialGradient(
+                //中心座標
+                mHalfSize, mHalfSize,
+                //半径
+                mHalfSize,
+                Color.WHITE, getResources().getColor(R.color.white00),
+                Shader.TileMode.CLAMP);
+
+
+        /*
+          Paintの設定（共通）
+         */
         Paint paint = new Paint();
-        paint.setShader(gradient);
-        paint.setAlpha( 0x99 );
+        paint.setAlpha(0x99);
+        paint.setShadowLayer(mSize / 8f, 0, 0, Color.WHITE);
 
-        paint.setShadowLayer( mSize / 8f, 0, 0, Color.WHITE);
+        /*
+         * オブジェクトのPathを生成
+         */
+        //中心円の生成
+        paint.setShader(circleGradient);
 
-        //描画してsave
+        Path circlePath = new Path();
+        circlePath.addCircle(mHalfSize, mHalfSize, mHalfSize / 3, Path.Direction.CW);
         canvas.drawPath(circlePath, paint);
         canvas.save();
 
-        //頂点の描画：十字
-        Path sparclePath = setVertexShin(
-                4,
-                -90,
-                //(viewRadius + outerRadius),
-                mHalfSize,
-                mHalfSize * 0.06f
-        );
+        //十字（細め）
+        paint.setShader(spacleGradient);
 
-        //ペイントにグラデーションを設定
-        Paint paint2 = new Paint();
-        //グラデーション：RadialGradient：放射状
-        Shader gradient1 = new RadialGradient(
-                //中心座標
-                mHalfSize, mHalfSize,
-                //半径
-                mHalfSize / 1,
-                Color.WHITE, getResources().getColor(R.color.white00),
-                Shader.TileMode.CLAMP);
-        paint2.setShader(gradient1);
-        paint2.setShadowLayer( mSize / 8f, 0, 0, Color.WHITE);
-
-        //描画後、スパークル側を復元
-        canvas.drawPath(sparclePath, paint2);
+        Path sparcleCrossPath = setVertexShin(4, -90, mHalfSize, mHalfSize * 0.06f);
+        canvas.drawPath(sparcleCrossPath, paint);
         canvas.save();
 
-        //頂点の描画：十字斜め
-        Path sparclePath2 = setVertexShin(
-                4,
-                -45,
-                //(viewRadius + outerRadius),
-                mHalfSize / 2,
-                mHalfSize * 0.06f
-        );
+        //斜め十字（細め）
+        Path sparcleDiagonalPath = setVertexShin(4, -45, mHalfSize / 2, mHalfSize * 0.06f);
+        canvas.drawPath(sparcleDiagonalPath, paint);
 
-        //ペイントにグラデーションを設定
-        paint2 = new Paint();
-        //放射状のグラデーション
-        gradient1 = new RadialGradient(
-                //中心座標
-                mHalfSize, mHalfSize,
-                //半径
-                mHalfSize / 1,
-                Color.WHITE, getResources().getColor(R.color.white11),
-                Shader.TileMode.CLAMP);
-        paint2.setShader(gradient1);
-
-        //描画後、スパークル側を復元
-        canvas.drawPath(sparclePath2, paint2);
+        //保存したオブジェクトを復元
         canvas.restore();
-
-
-
-/*        final int CENTER_CIRCLE_RADIUS = 4;
-        final int POS_DIFF = CENTER_CIRCLE_RADIUS / 2;
-
-        //中央円
-        Path path = new Path();
-        path.addCircle(mHalfSize, mHalfSize, mHalfSize/2, Path.Direction.CW);
-
-        Paint paint1 = new Paint();
-        paint1.setStyle(Paint.Style.FILL);
-        paint1.setColor( Color.WHITE );
-        //mPaint.setShadowLayer( mSize/8f, 0, 0, Color.WHITE);
-
-        //描画してsave
-        canvas.drawPath(path, paint1);
-        canvas.save();
-
-        //中央円
-        Path path2 = new Path();
-        path2.addCircle(mHalfSize + 30, mHalfSize + 30, mHalfSize/2, Path.Direction.CW);
-        //描画の色を変更
-        paint1.setColor( Color.RED );
-        //描画
-        canvas.drawPath(path2, paint1);
-        //saveしていた描画内容を復元
-        canvas.restore();*/
 
         return null;
     }
-
-
 
     /*
      * 花びら
@@ -808,7 +760,7 @@ public class EffectView extends View {
             }
 
             //内側の情報
-            float angleIn = angle + 45 ;
+            float angleIn = angle + 45;
             float radiansIn = (float) (angleIn * (Math.PI / 180f));
             base = (float) (innerDist * Math.cos(radiansIn));
             height = (float) (innerDist * Math.sin(radiansIn));
@@ -829,7 +781,7 @@ public class EffectView extends View {
             int points,
             float startAngle,
             float viewRadius,
-            float innerDist ) {
+            float innerDist) {
 
         //パス
         Path path = new Path();
@@ -840,20 +792,20 @@ public class EffectView extends View {
         float oneAngle = 360f / points;
 
         //光の長さの範囲
-        int range = (int)mHalfSize * 100;
+        int range = (int) mHalfSize * 100;
         Random random = new Random();
 
         //指定頂点の数だけ繰り返し
         for (int i = 0; i < points; i++) {
             float angle = startAngle + (oneAngle * i);
             float radians = (float) (angle * (Math.PI / 180f));
-            float halfRadians = (float) ( (angle + (oneAngle / 2f)) * (Math.PI / 180f));
+            float halfRadians = (float) ((angle + (oneAngle / 2f)) * (Math.PI / 180f));
 
             //光の長さをランダムに生成
             float outerRadius = random.nextInt(range + 1) / 100f;
 
             //外側の情報
-            float base   = (float) ((viewRadius + outerRadius) * Math.cos(radians));
+            float base = (float) ((viewRadius + outerRadius) * Math.cos(radians));
             float height = (float) ((viewRadius + outerRadius) * Math.sin(radians));
             float x = centerX + base;
             float y = centerY + height;
@@ -869,7 +821,7 @@ public class EffectView extends View {
             Log.i("スパークル", "----  角度=" + angle);
             Log.i("スパークル", "頂点 x=\t" + x + "\t" + y);
 
-            base   = (float) (innerDist * Math.cos(halfRadians));
+            base = (float) (innerDist * Math.cos(halfRadians));
             height = (float) (innerDist * Math.sin(halfRadians));
             x = centerX + base;
             y = centerY + height;
@@ -934,7 +886,7 @@ public class EffectView extends View {
 
             //間の長さは短くする
             float outerValue;
-            if( (i % 2) == 1 ){
+            if ((i % 2) == 1) {
                 outerValue = outerDist / 2;
             } else {
                 outerValue = outerDist;
@@ -980,7 +932,7 @@ public class EffectView extends View {
         //Path path = new Path();
         Path path;
 
-        switch( mEffectKind ){
+        switch (mEffectKind) {
             case EffectActivity.HEART1:
                 path = createHeart1();
                 break;
@@ -1030,7 +982,7 @@ public class EffectView extends View {
                 break;
 
             case EffectActivity.O2:
-                path = create2Sparcle( canvas );
+                path = createCenterCircleSparcle(canvas);
                 break;
 
             default:
@@ -1041,7 +993,7 @@ public class EffectView extends View {
         //--------------
         // 共通設定
         //--------------
-        if( mEffectKind == EffectActivity.O2 ){
+        if (mEffectKind == EffectActivity.O2) {
             //canvasの処理はpath生成時に実行
 
         } else {
@@ -1049,7 +1001,7 @@ public class EffectView extends View {
             mPaint.setStyle(Paint.Style.FILL);
             //mPaint.setStyle(Paint.Style.STROKE);
             //mPaint.setStrokeWidth( 4 );
-            mPaint.setShadowLayer( mSize/8f, 0, 0, mShadowColor);
+            mPaint.setShadowLayer(mSize / 8f, 0, 0, mShadowColor);
             //mPaint.setShadowLayer( 20, 0, 0, mShadowColor);
 
             canvas.drawPath(path, mPaint);
@@ -1061,17 +1013,17 @@ public class EffectView extends View {
     /*
      * 回転
      */
-    public void setRotate( float rotate ){
+    public void setRotate(float rotate) {
         Log.i("回転", "値=" + rotate);
-        setRotation( rotate );
+        setRotation(rotate);
     }
 
-    public void setShadow(){
+    public void setShadow() {
         mShadowColor = Color.BLUE;
         invalidate();
     }
 
-    public void setGradation( float process ){
+    public void setGradation(float process) {
 
         //Log.i("アニメーション処理", "時間=" + process);
 
@@ -1086,28 +1038,28 @@ public class EffectView extends View {
 
         float startX, startY;
         float endX, endY;
-        if( process <= SWITCH_TIME_1 ){
+        if (process <= SWITCH_TIME_1) {
             //-- 開始座標 --//
             //移動方向：右
-            startX = width * ( process / INTERVAL );
+            startX = width * (process / INTERVAL);
             startY = 0;
             //-- 終了座標 --//
             //移動方向：左
-            endX = width * (1 - ( process / INTERVAL ));
+            endX = width * (1 - (process / INTERVAL));
             endY = height;
 
-        } else if( process <= SWITCH_TIME_2 ){
+        } else if (process <= SWITCH_TIME_2) {
             //-- 開始座標 --//
             //移動方向：下
             startX = width;
-            startY = height * ( (process - SWITCH_TIME_1) / INTERVAL);
+            startY = height * ((process - SWITCH_TIME_1) / INTERVAL);
 
             //-- 終了座標 --//
             //移動方向：上
             endX = 0;
             endY = height * (1 - ((process - SWITCH_TIME_1) / INTERVAL));
 
-        } else if( process <= SWITCH_TIME_3 ){
+        } else if (process <= SWITCH_TIME_3) {
             //-- 開始座標 --//
             //移動方向：左
             startX = width * (1 - (process - SWITCH_TIME_2) / INTERVAL);
@@ -1121,11 +1073,11 @@ public class EffectView extends View {
             //-- 開始座標 --//
             //移動方向：上
             startX = 0;
-            startY = height * (1 - ( (process - SWITCH_TIME_3) / INTERVAL ));
+            startY = height * (1 - ((process - SWITCH_TIME_3) / INTERVAL));
             //-- 終了座標 --//
             //移動方向：下
             endX = width;
-            endY = height * ( (process - SWITCH_TIME_3) / INTERVAL );
+            endY = height * ((process - SWITCH_TIME_3) / INTERVAL);
         }
 
 /*        if( process > 0.5f ){
@@ -1147,7 +1099,7 @@ public class EffectView extends View {
                 Color.RED,
                 Color.WHITE,
                 Shader.TileMode.MIRROR);
-        mPaint.setShader( gradient );
+        mPaint.setShader(gradient);
     }
 
     /*
